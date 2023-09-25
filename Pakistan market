@@ -1,0 +1,32 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from cycler import cycler
+plt.rc('axes', prop_cycle=(cycler('color', plt.get_cmap('tab20b').colors)))
+df_ = pd.read_csv(r'Clean Data_pakwheels.csv')
+
+
+# marca com modelos mais presentes no paquistão
+marca_most = df_[['Id','Company Name', 'Model Name', 'Color', 'Assembly']]
+marca_presente = pd.DataFrame(marca_most['Company Name'].value_counts())
+marca_presente = marca_presente.reset_index()
+marca_presente = marca_presente.rename(columns={'index': 'Marca', 'Company Name': 'Qtde Presente'})
+marca = marca_presente[:6]['Marca']
+qtde = marca_presente[:6]['Qtde Presente']
+barra = plt.bar(marca, qtde, label=qtde)
+plt.bar_label(barra, qtde)
+plt.title('Marcas preferidas no mercado paquistanês')
+plt.show()
+
+
+#as 6 cores preferida do mercado paquistanês
+cor_most=df_[['Color']]
+cor_presente=pd.DataFrame(cor_most['Color'].value_counts())
+cor_presente=cor_presente.reset_index()
+cor_presente=cor_presente.rename(columns={'index': 'Cor', 'Color': 'Qtde Comprada'})
+
+destaque = [0, 0, 0, 0, 0.1, 0.1]
+qtde_cor=cor_presente[:6]['Qtde Comprada']
+cor=cor_presente[:6]['Cor']
+cores = plt.get_cmap('tab20b').colors
+plt.pie(qtde_cor, labels=cor, colors=cores, autopct='%.1f', explode=destaque)
+plt.show()
